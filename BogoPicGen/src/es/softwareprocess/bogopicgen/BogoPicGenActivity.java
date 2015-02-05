@@ -89,17 +89,17 @@ public class BogoPicGenActivity extends Activity {
 	private Bitmap ourBMP;
 
 	private void setBogoPic() {
-		// TODO: Show a toast with message "Generating Photo"
-		
+		// Show a toast with message "Generating Photo"
+		Toast.makeText(this, "Generating Photo", Toast.LENGTH_SHORT).show();
 		
 		// TODO: Get a reference to the image button
-		
-		
+		ImageButton preview = (ImageButton) findViewById(R.id.TakeAPhoto);
+
 		// Generate a bogopic
 		ourBMP = BogoPicGen.generateBitmap(400, 400);
 		
-		// TODO: Assign the bogopic to the button with setImageBitmap
-		
+		//Assign the bogopic to the button with setImageBitmap
+		preview.setImageBitmap(ourBMP);
 	}
 
 	// Call this to accept
@@ -111,14 +111,18 @@ public class BogoPicGenActivity extends Activity {
 		
 		try {	
 			if (intent.getExtras() != null) {
-				// TODO: If cancelled, show a toast, set result to RESULT_CANCELED, finish and return 
-				
-				
-				// If accepted save the picture
-				File intentPicture = getPicturePath(intent);
-				saveBMP(intentPicture, ourBMP);
-				
-				// TODO: set result to RESULT_OK
+				//If cancelled, show a toast, set result to RESULT_CANCELED, finish and return 
+				if (cancel == true){
+					setResult(RESULT_CANCELED);
+					Toast.makeText(this, "Canceled", Toast.LENGTH_LONG).show();
+				}
+				else {				
+					// If accepted save the picture
+					File intentPicture = getPicturePath(intent);
+					saveBMP(intentPicture, ourBMP);
+					setResult(RESULT_OK);
+					
+				}
 				
 			} else {
 				Toast.makeText(this, "Photo Cancelled: No Reciever?",

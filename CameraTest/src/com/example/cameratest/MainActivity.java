@@ -64,24 +64,42 @@ public class MainActivity extends Activity {
 				+ String.valueOf(System.currentTimeMillis()) + ".jpg";
 		File imageFile = new File(imageFilePath);
 		imageFileUri = Uri.fromFile(imageFile);
+		
+		
+		//Put in the intent in the tag MediaStore.EXTRA_OUTPUT the URI
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 
-		// TODO: Put in the intent in the tag MediaStore.EXTRA_OUTPUT the URI
-		
-		// TODO: Start the activity (expecting a result), with the code
+		//Start the activity (expecting a result), with the code
 		// CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
-		
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+	
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO: Handle the results from CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
-		
-		// TODO: Handle the cases for RESULT_OK, RESULT_CANCELLED, and others
-		
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+			if (resultCode == RESULT_OK){
+				TextView tv = (TextView) findViewById(R.id.status);
+				tv.setText("Photo OK!");
+				ImageButton ib = (ImageButton) findViewById(R.id.TakeAPhoto);
+				Drawable picture = Drawable.createFromPath(imageFileUri.getPath());
+				ib.setImageDrawable(picture);
+			}
+			else if (resultCode == RESULT_CANCELED){
+				TextView tv = (TextView) findViewById(R.id.status);
+				tv.setText("Photo cancelled");
+			}
+			else{
+				TextView tv = (TextView) findViewById(R.id.status);
+				tv.setText("Not sure what happened!");
+			}
+				
 		// When the result is OK, set text "Photo OK!" in the status
 		//		and set the image in the Button with:
 		//		button.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 		// When the result is CANCELLED, set text "Photo canceled" in the status
 		// Otherwise, set text "Not sure what happened!" with the resultCode
+		}
 		
 	}
 }
